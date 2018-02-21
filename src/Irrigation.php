@@ -37,7 +37,7 @@ class Irrigation {
 			$duration = self::$data[$date]['wdef'] * IRRIGATION_1MM_DURATION;
 			$duration = (int)sprintf("%0.0f", $duration);
 			error_log("Applying ".self::$data[$date]['wdef']."mm of water in $duration seconds");
-			exec('python '.__DIR__.'/../scripts/run_irrigation.py '.($duration*4+IRRIGATION_SPINUP_SECONDS));// Seems like we aren't applying enough
+			exec('python '.__DIR__.'/../scripts/run_irrigation.py '.($duration+IRRIGATION_SPINUP_SECONDS));
 			exec('python '.__DIR__.'/../scripts/run_irrigation.py 0');// To make sure that it shut off properly.
 			self::$data[$date]['irrTime'] = isset(self::$data[$date]['irrTime']) ? self::$data[$date]['irrTime'] + $duration : $duration;
 			self::$data[$date]['irrt'] = (float)sprintf("%0.2f", self::$data[$date]['irrTime'] / IRRIGATION_1MM_DURATION);
@@ -162,7 +162,6 @@ class Irrigation {
 			trigger_error("COULDN'T PARSE RESPONSE");
 			return false;
 		}
-		//echo $result;
 	}
 }
 
