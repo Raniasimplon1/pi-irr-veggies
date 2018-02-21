@@ -8,17 +8,17 @@ INSTRUCTIONS:
 
 CONFIG FILE DEFINITIONS:
 
-	MIN_IRRIGATION - Minimum amount of irrigation to apply at a given time in millimeters
-	BASE_WEEKLY_WATER - Base Weekly Water need in millimeters
-	BASE_TEMP - Base Temperature for the weekly need in Celsius
-	BASE_TEMP_RANGE - Increments to use to add additional irrigation needs in Celsius. This VERY crudely simulates evaporation.
-	BASE_TEMP_INCREASE - How much additional water to apply for the BASE_TEMP_RANGE increment. This value is in millimeters
-	IRRIGATION_SPINUP_SECONDS - How long in seconds it takes for your irrigation system to achieve full water pressure. I recommend timing how long it takes to start up.
-	CUPS_PER_5MIN - How many cups of water were collected in a 5 minute period from a single hole in the PVC to calibrate the application rate.
-	WUNDERGROUND_API_KEY - Your Weather Underground API key
-	WUNDERGROUND_API_LOCATION - What location you want to pull data for.
-		Example of Specific City:	CA/San_Francisco
-		Example of Specific Station:	pws:KCATAHOE2
+* MIN_IRRIGATION - Minimum amount of irrigation to apply at a given time in millimeters
+* BASE_WEEKLY_WATER - Base Weekly Water need in millimeters
+* BASE_TEMP - Base Temperature for the weekly need in Celsius
+* BASE_TEMP_RANGE - Increments to use to add additional irrigation needs in Celsius. This VERY crudely simulates evaporation.
+* BASE_TEMP_INCREASE - How much additional water to apply for the BASE_TEMP_RANGE increment. This value is in millimeters
+* IRRIGATION_SPINUP_SECONDS - How long in seconds it takes for your irrigation system to achieve full water pressure. I recommend timing how long it takes to start up.
+* CUPS_PER_5MIN - How many cups of water were collected in a 5 minute period from a single hole in the PVC to calibrate the application rate.
+* WUNDERGROUND_API_KEY - Your Weather Underground API key
+* WUNDERGROUND_API_LOCATION - What location you want to pull data for.
+** Example of Specific City: CA/San_Francisco
+** Example of Specific Station: pws:KCATAHOE2
 
 CALIBRATION:
 To calibrate my system I used a measuring cup at the fatherst point in the irrigation piping system. I manually triggered the irrigation to run and collected water for 5 minutes. 
@@ -31,7 +31,9 @@ IMPORTANT NOTICES:
 
 DOCUMENTATION:
 
-Default Values Taken ROughly from http://www.sprinklerwarehouse.com/DIY-Calculating-Precipitation-Rate-s/7942.htm
+Default Values Taken ROughly from https://bonnieplants.com/library/how-much-water-do-vegetables-need/
+
+Calibration Help: http://www.sprinklerwarehouse.com/DIY-Calculating-Precipitation-Rate-s/7942.htm
 
 My Build: https://plus.google.com/u/0/collection/srqHQB
 
