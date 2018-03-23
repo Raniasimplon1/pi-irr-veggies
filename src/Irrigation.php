@@ -33,7 +33,9 @@ class Irrigation {
 
 	public static function apply() {
 		$date = isset(self::$today) ? self::$today : date('Y-m-d');
-		if (isset(self::$data[$date]) && self::$data[$date]['wdef'] > MIN_IRRIGATION) {
+
+		// Make sure that we need at least the minimum and aren't going to dip below freezing
+		if (isset(self::$data[$date]) && self::$data[$date]['wdef'] > MIN_IRRIGATION && self::$data[$date]['tmpn'] > 2) {
 			$duration = self::$data[$date]['wdef'] * IRRIGATION_1MM_DURATION;
 			$duration = (int)sprintf("%0.0f", $duration);
 			error_log("Applying ".self::$data[$date]['wdef']."mm of water in $duration seconds");
@@ -62,6 +64,11 @@ class Irrigation {
 			$rollingNeeds[] = $dailyNeed;
 			$rollingPrecip[] = $day['pcpt'];
 			$rollingIrrigation[] = isset($day['irrt']) ? $day['irrt'] : 0;
+			while (count($rollingNeeds) > 7) {
+					array_shift($rollingNeeds);
+					array_shift($rollingPrecip);
+					array_shift($rollingIrrigation);
+			}
 
 			self::$data[$date]['wdef'] = array_sum($rollingNeeds) - array_sum($rollingPrecip) - array_sum($rollingIrrigation);
 			if (self::$data[$date]['wdef'] < 0) {
@@ -80,6 +87,7 @@ class Irrigation {
 
 	public static function getForecast() {
 		$address = 'http://api.wunderground.com/api/'.WUNDERGROUND_API_KEY.'/forecast/q/'.WUNDERGROUND_API_LOCATION.'.json';
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $address);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -99,6 +107,8 @@ class Irrigation {
 				self::$data[$date]['type'] = 'fcast';
 				self::$data[$date]['pcpt'] = $forecast['qpf_allday']['mm'];
 				self::$data[$date]['rlha'] = $forecast['avehumidity'];
+				self::$data[$date]['tmpn'] = $forecast['low']['celsius'];
+				self::$data[$date]['tmpx'] = $forecast['high']['celsius'];
 				self::$data[$date]['tmpa'] = ($forecast['high']['celsius'] + $forecast['low']['celsius']) / 2;
 				self::$data[$date]['wspa'] = $forecast['avewind']['kph'];
 
@@ -121,6 +131,7 @@ class Irrigation {
 
 	public static function getYesterday() {
 		$address = 'http://api.wunderground.com/api/'.WUNDERGROUND_API_KEY.'/yesterday/q/'.WUNDERGROUND_API_LOCATION.'.json';
+
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $address);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -143,6 +154,8 @@ class Irrigation {
 			self::$data[$date]['dwpa'] = $tmp['history']['dailysummary'][0]['meandewptm'];
 			self::$data[$date]['pcpt'] = $tmp['history']['dailysummary'][0]['precipm'];
 			self::$data[$date]['rlha'] = $tmp['history']['dailysummary'][0]['humidity'];
+			self::$data[$date]['tmpn'] = $tmp['history']['dailysummary'][0]['mintempm'];
+			self::$data[$date]['tmpx'] = $tmp['history']['dailysummary'][0]['maxtempm'];
 			self::$data[$date]['tmpa'] = $tmp['history']['dailysummary'][0]['meantempm'];
 			self::$data[$date]['wspa'] = $tmp['history']['dailysummary'][0]['meanwindspdm'];
 
